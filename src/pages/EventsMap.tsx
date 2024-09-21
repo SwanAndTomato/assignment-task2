@@ -15,9 +15,32 @@ export default function EventsMap(props: StackScreenProps<any>) {
     const authenticationContext = useContext(AuthenticationContext);
     const mapViewRef = useRef<MapView>(null);
 
-    const handleNavigateToCreateEvent = () => {};
+    const events: event[] = [
+        {
+            id: 'e3c95682-870f-4080-a0d7-ae8e23e2534f',
+            position: { latitude: 51.105761, longitude: -114.106943 },
+        },
+        {
+            id: '98301b22-2b76-44f1-a8da-8c86c56b0367',
+            position: { latitude: 51.04112, longitude: -114.069325 },
+        },
+        {
+            id: 'd7b8ea73-ba2c-4fc3-9348-9814076124bd',
+            position: { latitude: 51.01222958257112, longitude: -114.11677222698927 },
+        },
+        {
+            id: 'd1a6b9ea-877d-4711-b8d7-af8f1bce4d29',
+            position: { latitude: 51.010801915407036, longitude: -114.07823592424393 },
+        },
+    ];
 
-    const handleNavigateToEventDetails = () => {};
+    const handleNavigateToCreateEvent = () => {
+    navigation.navigate('CreateEvents')
+    };
+
+    const handleNavigateToEventDetails = (eventId: string) => {
+        navigation.navigate('EventsDetail',{eventId});
+    };
 
     const handleLogout = async () => {
         AsyncStorage.multiRemove(['userInfo', 'accessToken']).then(() => {
@@ -67,7 +90,7 @@ export default function EventsMap(props: StackScreenProps<any>) {
             </MapView>
 
             <View style={styles.footer}>
-                <Text style={styles.footerText}>X event(s) found</Text>
+                <Text style={styles.footerText}>{events.length} found</Text>
                 <RectButton
                     style={[styles.smallButton, { backgroundColor: '#00A3FF' }]}
                     onPress={handleNavigateToCreateEvent}
@@ -146,33 +169,3 @@ interface event {
     };
 }
 
-const events: event[] = [
-    {
-        id: 'e3c95682-870f-4080-a0d7-ae8e23e2534f',
-        position: {
-            latitude: 51.105761,
-            longitude: -114.106943,
-        },
-    },
-    {
-        id: '98301b22-2b76-44f1-a8da-8c86c56b0367',
-        position: {
-            latitude: 51.04112,
-            longitude: -114.069325,
-        },
-    },
-    {
-        id: 'd7b8ea73-ba2c-4fc3-9348-9814076124bd',
-        position: {
-            latitude: 51.01222958257112,
-            longitude: -114.11677222698927,
-        },
-    },
-    {
-        id: 'd1a6b9ea-877d-4711-b8d7-af8f1bce4d29',
-        position: {
-            latitude: 51.010801915407036,
-            longitude: -114.07823592424393,
-        },
-    },
-];

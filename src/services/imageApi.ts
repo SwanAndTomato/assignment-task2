@@ -14,10 +14,12 @@ import { getEnvironentVariable } from '../utils';
 // When creating your app build or publishing, do not forget to run 'eas secret:push' command
 // to import your secret values to EAS.
 
+const IMGBB_API_KEY = '81d28dc26996812d4cfd6f782b772cb5';
+
 const imageApi = axios.create({
     baseURL: 'https://api.imgbb.com/1',
     headers: { 'Content-Type': 'multipart/form-data' },
-    params: { key: getEnvironentVariable('IMGBB_API_KEY') },
+    params: { key: getEnvironentVariable(IMGBB_API_KEY) },
 });
 
 export const uploadImage = (imageBase64: string): Promise<AxiosResponse> => {
