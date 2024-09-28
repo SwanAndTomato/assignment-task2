@@ -25,7 +25,7 @@ export default function Routes() {
             <NavigationContainer>
                 <Navigator
                     screenOptions={{
-                        headerShown: false,
+                        headerShown: true, //Disable when done testing
                         cardStyle: { backgroundColor: '#F2F3F5' },
                     }}
                 >

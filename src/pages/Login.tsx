@@ -22,7 +22,6 @@ export default function Login({ navigation }: StackScreenProps<any>) {
     const [emailIsInvalid, setEmailIsInvalid] = useState<boolean>();
     const [passwordIsInvalid, setPasswordIsInvalid] = useState<boolean>();
     const [authError, setAuthError] = useState<string>();
-
     const [accessTokenIsValid, setAccessTokenIsValid] = useState<boolean>(false);
     const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
     const isFocused = useIsFocused();

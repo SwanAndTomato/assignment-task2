@@ -72,16 +72,6 @@
   "users": [
     {
       "name": {
-        "first": "Power",
-        "last": "User"
-      },
-      "email": "admin@example.com",
-      "password": "pass1234",
-      "id": "56-TYUI",
-      "mobile": "(543) 905-5629"
-    },
-    {
-      "name": {
         "first": "Ulla",
         "last": "Ulriksen"
       },
@@ -234,6 +224,126 @@
       "email": "admin@example.com",
       "password": "pass1234",
       "id": "z4nE8Vw"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "Pass1234",
+      "id": "ukSmmVt"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "Pass1234",
+      "id": "dgn2OJr"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "JcUSoR9"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "3yQh4MB"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "GnTiyNN"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "sQLZXOq"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "RdNML6L"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "usS1JUu"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "NabMP7s"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "Pass1234",
+      "id": "deoJH5R"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "tTaIy2Y"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "nZYeVmC"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "HOsE586"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "srGFak9"
+    },
+    {
+      "email": "yasemin.akyuz@example.com",
+      "password": "$2a$10$8RRvGY70JK5/Y5jPnltkXOU/wYLhpRcbU48rYzNYx.XDFfqsnkYHm",
+      "id": "5oXXyyV"
+    },
+    {
+      "email": "yasemin.akyuz@example.com",
+      "password": "$2a$10$riZrILdnrgZfM1eymhR6leGdp9Pe3s1MbL6ig5HegPf0QcYImfV22",
+      "id": "55AB6W8"
+    },
+    {
+      "email": "yasemin.akyuz@example.com",
+      "password": "$2a$10$riZrILdnrgZfM1eymhR6leGdp9Pe3s1MbL6ig5HegPf0QcYImfV22",
+      "id": "eTl8-jJ"
+    },
+    {
+      "email": "yasemin.akyuz@example.com",
+      "password": "$2a$10$riZrILdnrgZfM1eymhR6leGdp9Pe3s1MbL6ig5HegPf0QcYImfV22",
+      "id": "W-R5GNm"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "WjRBfCu"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "0Z2hvsx"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "Xse-t-E"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "Sa9W1WP"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "pass1234",
+      "id": "BzLOpjL"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "Pass1234",
+      "id": "tbT1UY8"
     }
   ]
 }

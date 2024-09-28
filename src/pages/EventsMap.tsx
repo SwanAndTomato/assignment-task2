@@ -81,7 +81,7 @@ export default function EventsMap(props: StackScreenProps<any>) {
                                 latitude: event.position.latitude,
                                 longitude: event.position.longitude,
                             }}
-                            onPress={handleNavigateToEventDetails}
+                            onPress={() => handleNavigateToEventDetails(event.id)}
                         >
                             <Image resizeMode="contain" style={{ width: 48, height: 54 }} source={mapMarkerImg} />
                         </Marker>
