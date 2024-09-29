@@ -1,46 +1,54 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
+import { saveEvent } from '../services/api'; // Import the save function
+import { EventDetails } from '../types/Event'; // Import the EventDetails interface
 
 export default function CreateEvents(props: StackScreenProps<any>) {
     const { navigation } = props;
     const handleNavigateToEventsMap = () => {
-        navigation.navigate('EventsMap')
-        };    
+        navigation.navigate('EventsMap');
+    };
+
     const [eventName, setEventName] = useState('');
     const [eventDescription, setEventDescription] = useState('');
     const [eventDate, setEventDate] = useState(new Date());
     const [eventLocation, setEventLocation] = useState({ latitude: 51.04112, longitude: -114.069325 });
-    
+    const [eventImageUrl, setEventImageUrl] = useState('');
+    const [eventVolunteersNeeded, setEventVolunteersNeeded] = useState(0);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
-    const handleCreateEvent = () => {
-        if (!eventName || !eventDescription || !eventLocation) {
+    const handleCreateEvent = async () => {
+        if (!eventName || !eventDescription || !eventLocation || !eventImageUrl || !eventVolunteersNeeded) {
             Alert.alert('Validation Error', 'Please complete all fields.');
             return;
         }
 
-        const newEvent = {
+        const newEvent: EventDetails = {
             id: Date.now().toString(), // Unique ID for the event (timestamp-based)
             name: eventName,
+            dateTime: eventDate.toISOString(),
             description: eventDescription,
-            date: eventDate,
-            location: eventLocation,
+            imageUrl: eventImageUrl,
+            organizerId: '', // Set this to the logged-in user's ID
+            volunteersNeeded: eventVolunteersNeeded,
+            volunteersIds: [],
+            position: eventLocation,
         };
 
-        // Save to storage, API call, or navigation back to the EventsMap with the new event
-        console.log('Event Created:', newEvent);
-
-        Alert.alert('Success', 'Event created successfully!', [
-            { text: 'OK', onPress: () => navigation.navigate('EventsMap') },
-        ]);
-
-        // You would typically send this event to a backend or local storage
+        try {
+            await saveEvent(newEvent); // Save the event to db.json
+            Alert.alert('Success', 'Event created successfully!', [
+                { text: 'OK', onPress: () => navigation.navigate('EventsMap') },
+            ]);
+        } catch (error) {
+            Alert.alert('Error', 'Failed to create event.');
+        }
     };
 
     const handleMapPress = (e: any) => {
@@ -48,6 +56,7 @@ export default function CreateEvents(props: StackScreenProps<any>) {
     };
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <Text style={styles.label}>Event Name</Text>
             <TextInput
@@ -79,6 +88,21 @@ export default function CreateEvents(props: StackScreenProps<any>) {
                     }}
                 />
             )}
+            <Text style={styles.label}>Event Image URL</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter event image URL"
+                value={eventImageUrl}
+                onChangeText={setEventImageUrl}
+            />
+            <Text style={styles.label}>Volunteers Needed</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter number of volunteers needed"
+                value={eventVolunteersNeeded.toString()}
+                onChangeText={(text) => setEventVolunteersNeeded(Number(text))}
+                keyboardType="numeric"
+            />
             <Text style={styles.label}>Select Event Location</Text>
             <MapView
                 style={styles.map}
@@ -93,26 +117,29 @@ export default function CreateEvents(props: StackScreenProps<any>) {
                 <Marker coordinate={eventLocation} />
             </MapView>
             <RectButton
-                    style={[styles.smallButton, { backgroundColor: '#00A3FF' }]}
-                    onPress={handleCreateEvent}
-                >
-                    <Feather name="check" size={20} color="#FFF" />
-                </RectButton>
+                style={[styles.smallButton, { backgroundColor: '#00A3FF' }]}
+                onPress={handleCreateEvent}
+            >
+                <Feather name="check" size={20} color="#FFF" />
+            </RectButton>
+            <RectButton
+                style={[styles.smallButton, { backgroundColor: '#00A3FF' }]}
+                onPress={handleNavigateToEventsMap}
+            >
+                <Feather name="arrow-left" size={20} color="#FFF" />
+            </RectButton>
         </View>
-        
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject,
         flex: 1,
         padding: 20,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
         backgroundColor: '#fff',
     },
-
     label: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -126,10 +153,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderRadius: 5,
     },
-    text: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
     textArea: {
         height: 80,
     },
@@ -138,58 +161,12 @@ const styles = StyleSheet.create({
         height: 200,
         marginBottom: 20,
     },
-    mapStyle: {
-        ...StyleSheet.absoluteFillObject,
-    },
-
-    logoutButton: {
-        position: 'absolute',
-        top: 70,
-        right: 24,
-
-        elevation: 3,
-    },
-
-    footer: {
-        position: 'absolute',
-        left: 24,
-        right: 24,
-        bottom: 40,
-
-        backgroundColor: '#FFF',
-        borderRadius: 16,
-        height: 56,
-        paddingLeft: 24,
-
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-
-        elevation: 3,
-    },
-
-    footerText: {
-        fontFamily: 'Nunito_700Bold',
-        color: '#8fa7b3',
-    },
-
     smallButton: {
         width: 56,
         height: 56,
         borderRadius: 16,
-
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 20,
     },
 });
-
-/*<View style={styles.footer}>
-                <Text style={styles.footerText}>{events.length} found</Text>
-                <RectButton
-                    style={[styles.smallButton, { backgroundColor: '#00A3FF' }]}
-                    onPress={handleNavigateToCreateEvent}
-                >
-                    <Feather name="plus" size={20} color="#FFF" />
-                </RectButton>
-            </View>
-            */

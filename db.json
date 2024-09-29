@@ -67,6 +67,20 @@
         "EF-BZ00",
         "Q5bVHgP"
       ]
+    },
+    {
+      "id": "1727623189735",
+      "name": "Foodbank",
+      "dateTime": "2024-09-29T14:50:51.694Z",
+      "description": "Helping at the foodbank",
+      "imageUrl": "Www.google.co.uk",
+      "organizerId": "12345",
+      "volunteersNeeded": 34,
+      "volunteersIds": [],
+      "position": {
+        "latitude": 51.066928806267356,
+        "longitude": -114.03266569040596
+      }
     }
   ],
   "users": [
@@ -344,6 +358,21 @@
       "email": "admin@example.com",
       "password": "Pass1234",
       "id": "tbT1UY8"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "SoYXjMg"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "y99ixGG"
+    },
+    {
+      "email": "ulla.ulriksen@example.com",
+      "password": "$2a$10$hd96yCeGW794sN8OL7SeMeOGPVEY.wiQDcsHbf5p.Ngtjx93iqjIG",
+      "id": "E9Sgs30"
     }
   ]
 }

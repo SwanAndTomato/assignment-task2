@@ -21,3 +21,7 @@ export const authenticateUser = (email: string, password: string): Promise<Axios
 export const fetchEvent = (eventId: string): Promise<AxiosResponse<Event>> => {
     return api.get(`/events/${eventId}`);
 };
+
+export const saveEvent = (event: any): Promise<AxiosResponse<Event>> => {
+    return api.post(`/events/`,event);
+};

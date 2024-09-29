@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -9,31 +9,49 @@ import customMapStyle from '../../map-style.json';
 import * as MapSettings from '../constants/MapSettings';
 import { AuthenticationContext } from '../context/AuthenticationContext';
 import mapMarkerImg from '../images/map-marker.png';
+import mapMarkerBlueImg from '../images/map-marker-blue.png';
+import mapMarkerGreyImg from '../images/map-marker-grey.png';
+import { EventDetails } from '../types/Event';
+import { fetchEvent } from '../services/api';
 
 export default function EventsMap(props: StackScreenProps<any>) {
     const { navigation } = props;
     const authenticationContext = useContext(AuthenticationContext);
     const mapViewRef = useRef<MapView>(null);
+    const [events, setEvents] = useState<EventDetails[]>([]);
+    const [userId, setUserId] = useState<string | null>(null);
 
-    const events: event[] = [
-        {
-            id: 'e3c95682-870f-4080-a0d7-ae8e23e2534f',
-            position: { latitude: 51.105761, longitude: -114.106943 },
-        },
-        {
-            id: '98301b22-2b76-44f1-a8da-8c86c56b0367',
-            position: { latitude: 51.04112, longitude: -114.069325 },
-        },
-        {
-            id: 'd7b8ea73-ba2c-4fc3-9348-9814076124bd',
-            position: { latitude: 51.01222958257112, longitude: -114.11677222698927 },
-        },
-        {
-            id: 'd1a6b9ea-877d-4711-b8d7-af8f1bce4d29',
-            position: { latitude: 51.010801915407036, longitude: -114.07823592424393 },
-        },
-    ];
+    useEffect(() => {
+        // Fetch the logged-in user's ID
+        const fetchUserId = async () => {
+            const userInfo = await AsyncStorage.getItem('userInfo');
+            if (userInfo) {
+                const user = JSON.parse(userInfo);
+                setUserId(user.id);
+            }
+        };
 
+        fetchUserId();
+    }, []);
+
+    useEffect(() => {
+ 
+        const fetchEvents = async () => {
+            try {
+                const response = await fetch('http://192.168.0.18:3333/events');
+                const data = await response.json();
+                const eventPromises = data.map((event: { id: string }) => fetchEvent(event.id));
+                const eventResponses = await Promise.all(eventPromises);
+                const eventsData = eventResponses.map((response) => response.data);
+                setEvents(eventsData);
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+
+        fetchEvents();
+    }, []);
+    
     const handleNavigateToCreateEvent = () => {
     navigation.navigate('CreateEvents')
     };
@@ -47,6 +65,16 @@ export default function EventsMap(props: StackScreenProps<any>) {
             authenticationContext?.setValue(undefined);
             navigation.navigate('Login');
         });
+    };
+
+    const getMarkerImage = (event: EventDetails) => {
+        if (userId && event.volunteersIds.includes(userId)) {
+            return mapMarkerBlueImg;
+        } else if (event.volunteersIds.length >= event.volunteersNeeded) {
+            return mapMarkerGreyImg;
+        } else {
+            return mapMarkerImg;
+        }
     };
 
     return (
@@ -83,7 +111,7 @@ export default function EventsMap(props: StackScreenProps<any>) {
                             }}
                             onPress={() => handleNavigateToEventDetails(event.id)}
                         >
-                            <Image resizeMode="contain" style={{ width: 48, height: 54 }} source={mapMarkerImg} />
+                            <Image resizeMode="contain" style={{ width: 48, height: 54 }} source={getMarkerImage(event)} />
                         </Marker>
                     );
                 })}

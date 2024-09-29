@@ -2,18 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RectButton } from 'react-native-gesture-handler';
+import { RectButton,ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import { fetchEvent } from '../services/api'; // Assuming api.ts is in the services folder
-import { EventDetails } from '../interfaces/EventDetails'; // Importing EventDetails interface
+import { EventDetails } from '../types/Event'; // Importing EventDetails interface
 import { useIsFocused } from '@react-navigation/native';
 
 export default function EventsDetail({ route, navigation }: StackScreenProps<any>) {
-    const { eventId } = route.params; // Extract eventId from params
+    const { eventId, userId } = route.params; // Extract eventId and userId from params
     const [event, setEvent] = useState<EventDetails | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true); // For showing the loading spinner
     const [apiError, setApiError] = useState<string | null>(null); // For handling API errors
+    const [hasVolunteered, setHasVolunteered] = useState<boolean>(false); // Track if user has volunteered
+    const [isEventFull, setIsEventFull] = useState<boolean>(false); // Track if the event is full
     const isFocused = useIsFocused();
+
+    const handleNavigateToEventsMap = () => {
+        navigation.navigate('EventsMap')
+        };
 
     useEffect(() => {
         if (isFocused) {
@@ -24,6 +30,8 @@ export default function EventsDetail({ route, navigation }: StackScreenProps<any
                     try {
                         const response = await fetchEvent(eventId); // Fetch event data
                         setEvent(response.data);
+                        setHasVolunteered(response.data.volunteersIds.includes(userId)); // Check if user has volunteered
+                        setIsEventFull(response.data.volunteersIds.length >= response.data.volunteersNeeded); // Check if event is full
                     } catch (error) {
                         console.error('Failed to load event details:', error);
                         setApiError('Unable to load event details. Please try again.');
@@ -70,12 +78,19 @@ export default function EventsDetail({ route, navigation }: StackScreenProps<any
     };
 
     const handleVolunteer = () => {
-        Alert.alert('Volunteer', 'Volunteering for the event...');
+        if (hasVolunteered) {
+            Alert.alert('Volunteer', 'You have already volunteered for this event.');
+        } else if (isEventFull) {
+            Alert.alert('Volunteer', 'No spaces left. The team is full.');
+        } else {
+            Alert.alert('Volunteer', 'Volunteering for the event...');
+        }
     };
 
     const volunteersCount = event.volunteersIds.length;
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <Image source={{ uri: event.imageUrl }} style={styles.eventImage} />
 
@@ -123,10 +138,12 @@ export default function EventsDetail({ route, navigation }: StackScreenProps<any
                 />
             </MapView>
 
-            <TouchableOpacity style={styles.directionsButton}>
-                <Text style={styles.directionsButtonText}>Get Directions to Event</Text>
+            <TouchableOpacity style={styles.directionsButton} onPress={handleNavigateToEventsMap}>
+                <Text style={styles.directionsButtonText}>Back to Map</Text>
             </TouchableOpacity>
+
         </View>
+        </ScrollView>
     );
 }
 
