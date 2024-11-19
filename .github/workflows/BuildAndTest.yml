@@ -27,7 +27,7 @@ jobs:
 
       # Run unit tests
       - name: Run unit tests
-        run: npm test
+        run: npx jest
 
       # Set up Expo for building binaries
       - name: Set up Expo
