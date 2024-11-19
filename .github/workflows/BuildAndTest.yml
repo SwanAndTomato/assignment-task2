@@ -1,6 +1,7 @@
 name: Build and Test for Release
 
 on:
+  workflow_dispatch:
   release:
     types:
       - created
