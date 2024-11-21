@@ -37,7 +37,7 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: Install CocoaPods dependencies (iOS only)
         run: cd ios && pod install
