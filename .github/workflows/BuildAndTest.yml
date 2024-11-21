@@ -42,6 +42,9 @@ jobs:
       - name: Install CocoaPods dependencies (iOS only)
         run: cd ios && pod install
 
+      - name: Decode keystore
+        run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
+      
       - name: Build Android binary
         run: |
           cd android
@@ -51,12 +54,24 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      
       - name: Upload Android artifact
         uses: actions/upload-artifact@v3
         with:
           name: android-release.apk
           path: android/app/build/outputs/apk/release/app-release.apk
 
+      - name: Decode certificate and provisioning profile
+        run: |
+            echo $APPLE_CERTIFICATE | base64 --decode > ios/certificate.p12
+            echo $APPLE_PROVISIONING_PROFILE | base64 --decode > ios/profile.mobileprovision
+        
+      - name: Install provisioning profile
+        run: mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && cp ios/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        
+      - name: Install certificate
+        run: security import ios/certificate.p12 -k ~/Library/Keychains/login.keychain-db -P ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
+ 
       - name: Build iOS binary
         run: |
           cd ios
