@@ -96,7 +96,7 @@ The navigation flow from left to right, shown below.
 <tr>
 <td><img src="screenshots/Login%20Splash%20Screen.png" alt="Login Screen" width="209" height="454"></td>
 <td><img src="screenshots/MapScreen.png" alt="Map Screen" width="209" height="454"></td>
-<td><img src="screenshots/CreateEvent.png" alt="Event Screen" width=50% height=50%></td>
+<td><img src="screenshots/CreateEvent.png" alt="Event Screen" width="209" height="454" ></td>
 </tr>
 <tr>
 <td>

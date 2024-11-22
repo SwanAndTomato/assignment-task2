@@ -1,4 +1,4 @@
-name: Build and Test for Release
+name: Build and Test on Release
 
 on:
   workflow_dispatch:
@@ -7,69 +7,90 @@ on:
       - created
 
 jobs:
-  test-and-build:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 18
 
-      # Install dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --force --legacy-peer-deps
 
-      # Run unit tests
       - name: Run unit tests
-        run: npm test
+        run: npx jest
 
-      # Set up Expo for building binaries
-      - name: Set up Expo
-        run: npx expo install
-
-      # Build the Android binary
-      - name: Build Android APK
-        run: |
-          npx expo build:android --type apk
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-      # Build the iOS binary
-      - name: Build iOS IPA
-        run: |
-          npx expo build:ios --type archive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-      # Upload artifacts
-      - name: Upload Android APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: android-apk
-          path: dist/*.apk
-
-      - name: Upload iOS IPA
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios-ipa
-          path: dist/*.ipa
-
-  notify:
-    needs: test-and-build
-    runs-on: ubuntu-latest
-    if: success()
-
+  build:
+    runs-on: macos-latest
+    needs: test
     steps:
-      # Notify and provide links to the release and artifacts
-      - name: Notify Jeremy
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install --force
+
+      - name: Install CocoaPods dependencies (iOS only)
+        run: cd ios && pod install
+
+      - name: Decode keystore
+        run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
+      
+      - name: Build Android binary
         run: |
-          echo "Release complete! Here are your links:"
-          echo "GitHub Release Page: ${{ github.event.release.html_url }}"
-          echo "Android APK: <link-to-apk>"
-          echo "iOS IPA: <link-to-ipa>"
+          cd android
+          ./gradlew assembleRelease
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      
+      - name: Upload Android artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+
+      - name: Decode certificate and provisioning profile
+        run: |
+            echo $APPLE_CERTIFICATE | base64 --decode > ios/certificate.p12
+            echo $APPLE_PROVISIONING_PROFILE | base64 --decode > ios/profile.mobileprovision
+        
+      - name: Install provisioning profile
+        run: mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && cp ios/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+        
+      - name: Install certificate
+        run: security import ios/certificate.p12 -k ~/Library/Keychains/login.keychain-db -P ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
+ 
+      - name: Build iOS binary
+        run: |
+          cd ios
+          xcodebuild -workspace Volunteam.xcworkspace \
+                     -scheme Volunteam \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     -archivePath $PWD/build/Volunteam.xcarchive \
+                     archive
+          xcodebuild -exportArchive \
+                     -archivePath $PWD/build/Volunteam.xcarchive \
+                     -exportPath $PWD/build \
+                     -exportOptionsPlist ExportOptions.plist
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ios-release.ipa
+          path: ios/build/Volunteam.ipa
