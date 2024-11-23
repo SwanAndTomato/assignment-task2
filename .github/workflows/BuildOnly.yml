@@ -29,7 +29,7 @@ jobs:
 
       - name: ensure 'Android' directory is present
         run: mkdir -p android
-        
+
       - name: ensure 'Android/app' directory is present
         run: mkdir -p android/app
 
@@ -48,15 +48,15 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
+      - name: install Gradle Wrapper
+        run: |
+          cd android
+          gradle wrapper
+
       - name: Build Android binary
         run: |
           cd android
           ./gradlew assembleRelease
-        env:
-          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
       
       - name: Upload Android artifact
         uses: actions/upload-artifact@v3
