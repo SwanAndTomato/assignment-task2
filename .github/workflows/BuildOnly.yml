@@ -57,10 +57,11 @@ jobs:
         run: |
           cd android
           gradle wrapper
-          
-      - name: Build Android binary
+
+      - name: Create Android Build
         run: |
           cd android
+          ./gradlew clean
           ./gradlew assembleRelease
       
       - name: Upload Android artifact
