@@ -30,6 +30,11 @@ jobs:
       - name: ensure 'Android' directory is present
         run: mkdir -p android
 
+      - name: initialise Gradle
+        run: |
+          cd android
+          gradle init
+
       - name: ensure 'Android/app' directory is present
         run: mkdir -p android/app
 
@@ -47,11 +52,6 @@ jobs:
         run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-
-      - name: initialise Gradle
-        run: |
-          cd android
-          gradle init
 
       - name: install Gradle Wrapper
         run: |
