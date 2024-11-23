@@ -53,11 +53,6 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: install Gradle Wrapper
-        run: |
-          cd android
-          gradle wrapper
-
       - name: Create Android Build
         run: |
           cd android
