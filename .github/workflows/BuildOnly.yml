@@ -29,6 +29,9 @@ jobs:
 
       - name: ensure 'Android' directory is present
         run: mkdir -p android
+        
+      - name: ensure 'Android/app' directory is present
+        run: mkdir -p android/app
 
       - name: Generate Android keystore
         run: |
