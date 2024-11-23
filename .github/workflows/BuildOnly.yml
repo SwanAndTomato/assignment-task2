@@ -61,6 +61,7 @@ jobs:
       - name: Create Android Build
         run: |
           cd android
+          apply plugin: 'java'
           ./gradlew clean
           ./gradlew assembleRelease
       
