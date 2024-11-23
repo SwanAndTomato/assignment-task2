@@ -58,6 +58,11 @@ jobs:
           cd android
           gradle wrapper
 
+      - name: Add assembleRelease to Gradle Task
+        run: |
+          cd android
+          gradle assembleRelease 
+
       - name: Build Android binary
         run: |
           cd android
