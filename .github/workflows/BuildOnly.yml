@@ -27,6 +27,16 @@ jobs:
       - name: Install CocoaPods dependencies (iOS only)
         run: cd ios && sudo gem install cocoapods
 
+      - name: Generate Android keystore
+        run: |
+          keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
+            .ANDROID_KEYSTORE_PASSWORD }} -keypass ${{ secrets
+            .ANDROID_KEY_PASSWORD }} -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, S=Unknown, C=Unknown"
+        env:
+            ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+            ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+            ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
       - name: Decode keystore
         run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
       
