@@ -30,6 +30,9 @@ jobs:
       - name: Decode keystore
         run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
       
+      - name: ensure 'Andoird' directory is present
+        run: mkdir -p android
+
       - name: Build Android binary
         run: |
           cd android
