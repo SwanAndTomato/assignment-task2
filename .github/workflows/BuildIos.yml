@@ -28,11 +28,24 @@ jobs:
         npm install -g expo-cli eas-cli
         npm install --force
 
+    # create eas.json file with development profile for IOS
+    - name: Create eas.json file
+      run: |
+        echo '{
+          "build": {
+            "development": {
+                "ios" : {
+                    "buildType": "simulator"
+                }
+            }
+          }
+        }' > eas.json
+
     # Log into Expo (requires EXPO_TOKEN)
     - name: Log in to Expo
       env:
         EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
-      run: npx expo login --token $EXPO_TOKEN
+      run: expo login --token $EXPO_TOKEN
 
     # Build iOS Development Client
     - name: Build iOS Client
