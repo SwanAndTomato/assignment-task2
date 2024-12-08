@@ -35,7 +35,7 @@ jobs:
 
       - name: Create app directory
         run: mkdir -p android/app
-        
+
       - name: Generate Android keystore
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
@@ -54,13 +54,13 @@ jobs:
       - name: Create Android Build
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew assemble
 
-      - name: Upload Android artifact
+      - name: Upload Android artifact Debug
         uses: actions/upload-artifact@v3
         with:
-          name: android-release.apk
-          path: android/app/build/outputs/apk/release/app-release.apk
+          name: android-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Decode certificate and provisioning profile
         run: |
