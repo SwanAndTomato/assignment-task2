@@ -8,7 +8,7 @@ on:
 
 jobs:
   build_ios:
-    name: Build iOS Client
+    name: Build Android App
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +21,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
-        cache: yarn
 
     # Install dependencies
     - name: Install dependencies
