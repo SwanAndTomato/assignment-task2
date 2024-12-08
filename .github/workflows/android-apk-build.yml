@@ -37,6 +37,10 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXP0_TOKEN }}
 
+    # Check who is logged in
+    - name: Review Username
+      run: eas whoami
+
     # Build the Android APK
     - name: Build Android APK
       run: eas build --platform android --profile production --non-interactive
