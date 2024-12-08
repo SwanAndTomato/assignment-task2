@@ -1,10 +1,10 @@
 name: Build Android APK
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+    workflow_dispatch:
+    release:
+      types:
+        - created
 
 jobs:
   build-android-apk:
@@ -37,14 +37,6 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXP0_TOKEN }}
 
-    # Generate Application in EAS
-    - name: Generate Application in EAS
-      run: eas build:configure
-
-    # Generate Public Build with QR Code
-    - name: Generate Public Build with QR Code
-      run: eas update         
-      
     # Build the Android APK
     - name: Build Android APK
       run: eas build --platform android --profile production --non-interactive
