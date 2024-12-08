@@ -51,6 +51,9 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
+      - name: Display list of gradle tasks
+        run: cd android && ./gradlew tasks
+
       - name: Build Android binary
         run: cd android && ./gradlew assembleRelease
 
