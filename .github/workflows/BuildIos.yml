@@ -28,7 +28,10 @@ jobs:
         npm install -g expo-cli eas-cli
 
 ### Build the Android App
-
+# Login to Expo using Token
+    - name: Login to Expo
+      run: |
+        echo ${{ secrets.EXP0_TOKEN }} | expo login --non-interactive
 # Build the Android app
     - name: Build Android app
       run: |
