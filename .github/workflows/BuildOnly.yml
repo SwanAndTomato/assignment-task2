@@ -51,8 +51,23 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Display list of gradle tasks
-        run: cd android && ./gradlew tasks
+      - name: Define assembleRelease task in Gradle
+        run: |
+          echo "android {
+            signingConfigs {
+              release {
+                storeFile file('app/my-release-key.jks')
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+              }
+            }
+            buildTypes {
+              release {
+                signingConfig signingConfigs.release
+              }
+            }
+          }" > android/app/build.gradle
 
       - name: Build Android binary
         run: cd android && ./gradlew assembleRelease
