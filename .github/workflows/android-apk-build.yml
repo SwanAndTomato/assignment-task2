@@ -26,17 +26,13 @@ jobs:
     - name: Install Expo CLI
       run: npm install --global expo-cli eas-cli
 
-    # Login to Expo
-    - name: Login to Expo
-      run: eas login --token ${{ secrets.EXP0_TOKEN }}
-
     # Install project dependencies
     - name: Install dependencies
-      run: npm install
+      run: npm install --force
 
     # Build the Android APK
     - name: Build Android APK
-      run: eas build --platform android --profile production --non-interactive
+      run: EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} build --platform android --profile production --non-interactive
 
     # Upload the APK as an artifact
     - name: Upload APK
