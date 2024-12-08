@@ -48,13 +48,13 @@ jobs:
       - name: Create Android Build
         run: |
           cd android
-          ./gradlew assemble
-      
+          ./gradlew assembleRelease
+
       - name: Upload Android artifact
         uses: actions/upload-artifact@v3
         with:
-          name: android-debug.apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: android-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
       - name: Decode certificate and provisioning profile
         run: |
