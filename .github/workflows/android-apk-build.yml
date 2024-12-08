@@ -39,7 +39,9 @@ jobs:
 
     # Check who is logged in
     - name: Review Username
-      run: eas whoami
+      run: | 
+          eas whoami
+          eas config --json
 
     # Build the Android APK
     - name: Build Android APK
