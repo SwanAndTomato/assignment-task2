@@ -38,7 +38,7 @@ jobs:
 # Build the Android app
     - name: Build Android app
       run: |
-        eas build --non-interactive
+        eas build --platform android --profile development --non-interactive
 
 # Upload APK artifact
     - name: Upload Android build artifact
