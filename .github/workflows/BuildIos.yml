@@ -26,16 +26,29 @@ jobs:
     - name: Install dependencies
       run: |
         npm install -g expo-cli eas-cli
-        npm install --force
 
-    # create eas.json file with development profile for IOS
+### Build the Android App
+
+# Build the Android app
+    - name: Build Android app
+      run: |
+        eas build --platform android --non-interactive
+
+# Upload APK artifact
+    - name: Upload Android build artifact
+      uses: actions/upload-artifact@v3
+      with:
+       name: android-build
+       path: ./builds/*-release.apk
+  
+### Build the iOS App
+
+ # create eas.json file with development profile for IOS
     - name: Create eas.json file
       run: |
             echo '{
             "build": {
                 "development": {
-                "distribution": "internal",
-                "releaseChannel": "development",
                 "ios": {
                     "buildType": "simulator"
                 }
@@ -47,7 +60,6 @@ jobs:
     - name: Build iOS Client
       env:
         EAS_BUILD_PROFILE: development
-        EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
       run: |
         eas build --platform ios --profile development --non-interactive
 
