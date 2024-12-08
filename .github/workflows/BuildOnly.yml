@@ -68,9 +68,9 @@ jobs:
           echo "        }" >> android/app/build.gradle
           echo "    }" >> android/app/build.gradle
           echo "}" >> android/app/build.gradle
-          
+
       - name: Build Android binary
-        run: cd android && ./gradlew assembleRelease
+        run: cd android/app && ./gradlew assembleRelease
 
       - name: Upload Android artifact
         uses: actions/upload-artifact@v3
