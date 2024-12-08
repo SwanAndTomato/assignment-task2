@@ -35,7 +35,7 @@ jobs:
           EXPO_PROJECT_OWNER: ${{ secrets.EXPO_PROJECT_OWNER }}
           EXPO_PROJECT_SLUG: ${{ secrets.EXPO_PROJECT_SLUG }}
         run: |
-          eas build --platform android --profile production --non-interactive
+          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform android --profile production --non-interactive
 
       # Step 5: Upload APK to GitHub Artifacts
       - name: Upload APK
