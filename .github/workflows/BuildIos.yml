@@ -45,7 +45,7 @@ jobs:
     - name: Log in to Expo
       env:
         EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
-      run: expo login -t $EXPO_TOKEN
+      run: expo login - EXPO_TOKEN
 
     # Build iOS Development Client
     - name: Build iOS Client
