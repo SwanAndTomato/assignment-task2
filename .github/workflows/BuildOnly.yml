@@ -42,7 +42,7 @@ jobs:
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
             .ANDROID_KEYSTORE_PASSWORD }} -keypass ${{ secrets
-            .ANDROID_KEY_PASSWORD }} -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, S=Unknown, C=Unknown"
+            .ANDROID_KEY_PASSWORD }} -dname "CN=Volunteam, OU=BVC Developer, O=Bow Valley College, L=Calgary, S=Alberta, C=Canada"
         env:
             ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
             ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
