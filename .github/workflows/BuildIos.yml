@@ -28,14 +28,13 @@ jobs:
         npm install -g expo-cli eas-cli
 
 ### Build the Android App
-# Login to Expo using Token
-    - name: Login to Expo
-      run: |
-        echo ${{ secrets.EXP0_TOKEN }} | expo login --non-interactive
+
 # Build the Android app
     - name: Build Android app
+      env:
+        EXPO_TOKEN: ${{secrets.EXP0_TOKEN }}
       run: |
-        eas build --platform android --non-interactive
+        EXPO_TOKEN eas build --platform android --non-interactive
 
 # Upload APK artifact
     - name: Upload Android build artifact
