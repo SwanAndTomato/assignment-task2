@@ -45,6 +45,12 @@ jobs:
       - name: Install CocoaPods dependencies (iOS only)
         run: cd ios && sudo gem install cocoapods
 
+      - name: ensure 'android' directory is present
+        run: mkdir -p android
+      
+      - name: Create android/app directory
+        run: cd android mkdir -p app
+
       - name: Generate Android keystore
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
@@ -58,9 +64,6 @@ jobs:
         run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-
-      - name: ensure 'anroid' directory is present
-        run: mkdir -p android
 
       - name: Build Android binary
         run: |
