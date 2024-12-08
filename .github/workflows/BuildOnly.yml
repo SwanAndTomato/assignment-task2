@@ -30,14 +30,6 @@ jobs:
       - name: ensure 'Android' directory is present
         run: mkdir -p android
 
-      - name: initialise Gradle
-        run: |
-          cd android
-          gradle init
-
-      - name: ensure 'Android/app' directory is present
-        run: mkdir -p android/app
-
       - name: Generate Android keystore
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
