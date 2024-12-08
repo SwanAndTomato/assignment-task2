@@ -41,16 +41,11 @@ jobs:
           }
         }' > eas.json
 
-    # Log into Expo (requires EXPO_TOKEN)
-    - name: Log in to Expo
-      env:
-        EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
-      run: expo login - EXPO_TOKEN
-
     # Build iOS Development Client
     - name: Build iOS Client
       env:
         EAS_BUILD_PROFILE: development
+        EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
       run: |
         eas build --platform ios --profile development --non-interactive
 
