@@ -28,13 +28,17 @@ jobs:
         npm install -g expo-cli eas-cli
 
 ### Build the Android App
+# Set up EAS
+    - name: 🏗 Setup EAS
+      uses: expo/expo-github-action@v8
+      with:
+          eas-version: latest
+          token: ${{ secrets.EXP0_TOKEN }}
 
 # Build the Android app
     - name: Build Android app
-      env:
-        EXPO_TOKEN: ${{secrets.EXP0_TOKEN }}
       run: |
-        EXPO_TOKEN eas build --platform android --non-interactive
+        eas build --platform android --non-interactive
 
 # Upload APK artifact
     - name: Upload Android build artifact
