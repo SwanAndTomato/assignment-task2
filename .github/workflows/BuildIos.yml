@@ -1,62 +1,49 @@
-name: Build IOS
+name: Build iOS Development Client
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
-  release:
-    types:
-      - created
 
 jobs:
-  build:
-    runs-on: macos-latest
+  build_ios:
+    name: Build iOS Client
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
 
-      - name: Install dependencies
-        run: npm install --force
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        npm install -g expo-cli eas-cli
+        npm install
 
-      - name: Ensure 'ios' directory is present
-        run: mkdir -p ios
+    # Log into Expo (requires EXPO_TOKEN)
+    - name: Log in to Expo
+      env:
+        EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
+      run: expo login --token $EXPO_TOKEN
 
-      - name: Install CocoaPods dependencies (iOS only)
-        run: cd ios && sudo gem install cocoapods
+    # Build iOS Development Client
+    - name: Build iOS Client
+      env:
+        EAS_BUILD_PROFILE: development
+      run: |
+        eas build --platform ios --profile development --non-interactive
 
-      - name: Decode certificate and provisioning profile
-        run: |
-            echo $APPLE_CERTIFICATE | base64 --decode > ios/certificate.p12
-            echo $APPLE_PROVISIONING_PROFILE | base64 --decode > ios/profile.mobileprovision
-        
-      - name: Install provisioning profile
-        run: mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && cp ios/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-        
-      - name: Install certificate
-        run: security import ios/certificate.p12 -k ~/Library/Keychains/login.keychain-db -P ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
- 
-      - name: Build iOS binary
-        run: |
-          cd ios
-          xcodebuild -workspace Volunteam.xcworkspace \
-                     -scheme Volunteam \
-                     -sdk iphoneos \
-                     -configuration Release \
-                     -archivePath $PWD/build/Volunteam.xcarchive \
-                     archive
-          xcodebuild -exportArchive \
-                     -archivePath $PWD/build/Volunteam.xcarchive \
-                     -exportPath $PWD/build \
-                     -exportOptionsPlist ExportOptions.plist
-        env:
-          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
-          APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
-
-      - name: Upload iOS artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios - release.ipa
-          path: ios/build/Volunteam.ipa
+    # Upload the build artifact (optional)
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-build
+        path: ./build
