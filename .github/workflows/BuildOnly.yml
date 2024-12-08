@@ -49,11 +49,8 @@ jobs:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
       - name: Initialise Gradle project
-        run: cd android && ./gradlew
+        run: cd android && gradle init
         
-
-
-
       - name: Create Android Build
         run: |
           cd android
