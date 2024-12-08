@@ -33,6 +33,9 @@ jobs:
       - name: Initialise Gradle project
         run: cd android && gradle init
 
+      - name: Create app directory
+        run: mkdir -p android/app
+        
       - name: Generate Android keystore
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
