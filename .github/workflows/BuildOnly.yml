@@ -51,24 +51,24 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Create assembleRelease task
+      - name: Create assembleRelease task in android/app/build.gradle
         run: |
-          echo "android {" >> android/build.gradle
-          echo "    signingConfigs {" >> android/build.gradle
-          echo "        release {" >> android/build.gradle
-          echo "            storeFile file('app/my-release-key.jks')" >> android/build.gradle
-          echo "            storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')" >> android/build.gradle
-          echo "            keyAlias System.getenv('ANDROID_KEY_ALIAS')" >> android/build.gradle
-          echo "            keyPassword System.getenv('ANDROID_KEY_PASSWORD')" >> android/build.gradle
-          echo "        }" >> android/build.gradle
-          echo "    }" >> android/build.gradle
-          echo "    buildTypes {" >> android/build.gradle
-          echo "        release {" >> android/build.gradle
-          echo "            signingConfig signingConfigs.release" >> android/build.gradle
-          echo "        }" >> android/build.gradle
-          echo "    }" >> android/build.gradle
-          echo "}" >> android/build.gradle
-
+          echo "android {" >> android/app/build.gradle
+          echo "    signingConfigs {" >> android/app/build.gradle
+          echo "        release {" >> android/app/build.gradle
+          echo "            storeFile file('my-release-key.jks')" >> android/app/build.gradle
+          echo "            storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')" >> android/app/build.gradle
+          echo "            keyAlias System.getenv('ANDROID_KEY_ALIAS')" >> android/app/build.gradle
+          echo "            keyPassword System.getenv('ANDROID_KEY_PASSWORD')" >> android/app/build.gradle
+          echo "        }" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "    buildTypes {" >> android/app/build.gradle
+          echo "        release {" >> android/app/build.gradle
+          echo "            signingConfig signingConfigs.release" >> android/app/build.gradle
+          echo "        }" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "}" >> android/app/build.gradle
+          
       - name: Build Android binary
         run: cd android && ./gradlew assembleRelease
 
