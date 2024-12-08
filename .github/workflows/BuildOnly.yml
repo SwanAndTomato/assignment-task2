@@ -30,8 +30,8 @@ jobs:
       - name: ensure 'Android' directory is present
         run: mkdir -p android
 
-      - name: create android/app directory
-        run: cd android && mkdir -p app
+      - name: Initialise Gradle project
+        run: cd android && gradle init
 
       - name: Generate Android keystore
         run: |
@@ -47,9 +47,6 @@ jobs:
         run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-
-      - name: Initialise Gradle project
-        run: cd android && gradle init
         
       - name: Create Android Build
         run: |
