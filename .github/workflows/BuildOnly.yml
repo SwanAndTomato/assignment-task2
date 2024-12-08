@@ -48,6 +48,9 @@ jobs:
         env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
+      - name: Initialise Android project
+        run: cd android && ./gradlew clean
+
       - name: Create Android Build
         run: |
           cd android
