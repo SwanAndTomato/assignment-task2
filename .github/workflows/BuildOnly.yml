@@ -30,6 +30,9 @@ jobs:
       - name: ensure 'Android' directory is present
         run: mkdir -p android
 
+      - name: create android/app directory
+        run: cd android && mkdir -p app
+
       - name: Generate Android keystore
         run: |
           keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
