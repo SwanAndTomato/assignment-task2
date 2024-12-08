@@ -31,15 +31,17 @@ jobs:
     # create eas.json file with development profile for IOS
     - name: Create eas.json file
       run: |
-        echo '{
-          "build": {
-            "development": {
-                "ios" : {
+            echo '{
+            "build": {
+                "development": {
+                "distribution": "internal",
+                "releaseChannel": "development",
+                "ios": {
                     "buildType": "simulator"
                 }
+                }
             }
-          }
-        }' > eas.json
+            }' > eas.json
 
     # Build iOS Development Client
     - name: Build iOS Client
