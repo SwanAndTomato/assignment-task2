@@ -1,30 +1,46 @@
-name: Android APK Build
+name: Build Android APK
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
 jobs:
-  update:
+  build-android-apk:
+    name: Build Android APK
     runs-on: ubuntu-latest
+
     steps:
-      - name: 🏗 Setup repo
-        uses: actions/checkout@v3
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: 🏗 Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          cache: yarn
+    # Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      - name: 🏗 Setup EAS
-        uses: expo/expo-github-action@v8
-        with:
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
+    # Install Expo CLI
+    - name: Install Expo CLI
+      run: npm install --global expo-cli eas-cli
 
-      - name: 📦 Install dependencies
-        run: yarn install
+    # Login to Expo
+    - name: Login to Expo
+      run: eas login --token ${{ secrets.EXP0_TOKEN }}
 
-      - name: 🚀 Create update
-        run: eas update --auto --non-interactive
+    # Install project dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Build the Android APK
+    - name: Build Android APK
+      run: eas build --platform android --profile production --non-interactive
+
+    # Upload the APK as an artifact
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: android-apk
+        path: dist/*.apk
