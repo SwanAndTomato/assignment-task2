@@ -12,38 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # Setup Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    # Install Expo CLI
-    - name: Install Expo CLI
-      run: npm install --global expo-cli eas-cli
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install --global eas-cli
+          npm ci
 
-    # Install project dependencies
-    - name: Install dependencies
-      run: npm install --force
+      # Step 4: Build APK with EAS
+      - name: Build Android APK
+        env:
+          EAS_ACCESS_TOKEN: ${{ secrets.EXP0_TOKEN }}
+          EXPO_PROJECT_OWNER: ${{ secrets.EXPO_PROJECT_OWNER }}
+          EXPO_PROJECT_SLUG: ${{ secrets.EXPO_PROJECT_SLUG }}
+        run: |
+          eas build --platform android --profile production --non-interactive
 
-    # Setup EAS
-    - name: 🏗 Setup EAS
-      uses: expo/expo-github-action@v8
-      with:
-          eas-version: latest
-          token: ${{ secrets.EXP0_TOKEN }}
-
-    # Build the Android APK
-    - name: Build Android APK
-      run: eas build --platform android --profile production --non-interactive
-
-    # Upload the APK as an artifact
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: android-apk
-        path: dist/*.apk
+      # Step 5: Upload APK to GitHub Artifacts
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-release-apk
+          path: dist/*.apk
