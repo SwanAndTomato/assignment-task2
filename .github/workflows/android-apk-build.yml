@@ -32,7 +32,9 @@ jobs:
 
     # Build the Android APK
     - name: Build Android APK
-      run: EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform android --non-interactive
+      env:
+       EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
+      run: EXPO_TOKEN eas build --platform android --non-interactive
 
     # Upload the APK as an artifact
     - name: Upload APK
