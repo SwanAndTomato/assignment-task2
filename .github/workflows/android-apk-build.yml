@@ -30,9 +30,16 @@ jobs:
     - name: Install dependencies
       run: npm install --force
 
+    # Setup EAS
+    - name: 🏗 Setup EAS
+      uses: expo/expo-github-action@v8
+      with:
+          eas-version: latest
+          token: ${{ secrets.EXP0_TOKEN }}
+
     # Build the Android APK
     - name: Build Android APK
-      run: EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform android --non-interactive
+      run: eas build --platform android --profile production --non-interactive
 
     # Upload the APK as an artifact
     - name: Upload APK
