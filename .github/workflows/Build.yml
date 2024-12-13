@@ -16,6 +16,12 @@ on:
         default: 'true'
 
 jobs:
+    test:
+        runs-on: macos-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+
     build:
         runs-on: macos-latest
         needs: test
@@ -44,56 +50,56 @@ jobs:
           run: cd android mkdir -p app
 
         - name: Generate Android keystore
-        run: |
-            keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets
-            .ANDROID_KEYSTORE_PASSWORD }} -keypass ${{ secrets.ANDROID_KEY_PASSWORD }} -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, S=Unknown, C=Unknown"
-            env:
+          run: |
+            keytool -genkey -v -keystore android/app/my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias ${{ secrets.ANDROID_KEY_ALIAS }} -storepass ${{ secrets.ANDROID_KEYSTORE_PASSWORD }} -keypass ${{ secrets.ANDROID_KEY_PASSWORD }} -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, S=Unknown, C=Unknown"
+          env:
             ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
             ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
             ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
         - name: Decode keystore
-        run: echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
-            env:
+          run: | 
+            echo $ANDROID_KEYSTORE | base64 --decode > android/app/my-release-key.jks
+          env: 
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
         - name: Build Android binary
-            run: |
+          run: |
             cd android
             ./gradlew assembleRelease
-            env:
+          env:
             ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
             ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
             ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
             ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        
+
         - name: Upload Android artifact
-            uses: actions/upload-artifact@v3
-            with:
+          uses: actions/upload-artifact@v3
+          with:
             name: android-release.apk
             path: android/app/build/outputs/apk/release/app-release.apk
 
         - name: Install Apple certificate and provisioning profile
-            run: |
+          run: |
             echo $APPLE_CERTIFICATE | base64 --decode > ios/certificate.p12
             echo $APPLE_PROVISIONING_PROFILE | base64 --decode > ios/profile.mobileprovision
-            env:
+          env:
             APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
             APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
 
         - name: Decode certificate and provisioning profile
-            run: |
+          run: |
                 echo $APPLE_CERTIFICATE | base64 --decode > ios/certificate.p12
                 echo $APPLE_PROVISIONING_PROFILE | base64 --decode > ios/profile.mobileprovision
             
         - name: Install provisioning profile
-            run: mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && cp ios/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+          run: mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles && cp ios/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
             
         - name: Install certificate
-            run: security import ios/certificate.p12 -k ~/Library/Keychains/login.keychain-db -P ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
+          run: security import ios/certificate.p12 -k ~/Library/Keychains/login.keychain-db -P ${{ secrets.APPLE_CERTIFICATE_PASSWORD }} -T /usr/bin/codesign
     
         - name: Build iOS binary
-            run: |
+          run: |
             cd ios
             xcodebuild -workspace Volunteam.xcworkspace \
                         -scheme Volunteam \
@@ -110,7 +116,7 @@ jobs:
             APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
 
         - name: Upload iOS artifact
-            uses: actions/upload-artifact@v3
-            with:
+          uses: actions/upload-artifact@v3
+          with:
             name: ios-release.ipa
             path: ios/build/Volunteam.ipa
