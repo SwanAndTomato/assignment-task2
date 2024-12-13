@@ -9,7 +9,7 @@ on:
 jobs:
   build-ios:
     name: Build iPhone Simulator
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -18,26 +18,27 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install Dependencies
         run: |
           npm install -g expo-cli --force
 
-      - name: Authenticate Expo
-        env:
-          EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
+      - name: Set EXPO_TOKEN Environment Variable
         run: |
-          expo login --non-interactive --token "$EXPO_TOKEN"
+            echo "EXPO_TOKEN=${{ secrets.EXP0_TOKEN }}" >> $GITHUB_ENV
 
       - name: Build iOS Simulator
-        env:
-          EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
         run: |
-          expo build:ios --type simulator --non-interactive
+          npx eas build --platform ios --profile preview --non-interactive
 
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v3
+      - name: Create Github Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: iOS-Simulator-Build
-          path: dist/*.tar.gz
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
