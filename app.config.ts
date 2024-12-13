@@ -4,6 +4,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
     name: 'volunteam',
     slug: 'volunteam',
+    owner: 'swanandtomato',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
