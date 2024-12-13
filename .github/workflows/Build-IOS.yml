@@ -23,10 +23,15 @@ jobs:
       - name: Install Dependencies
         run: |
           yarn install
-
+    
       - name: Set EXPO_TOKEN Environment Variable
         run: |
             echo "EXPO_TOKEN=${{ secrets.EXP0_TOKEN }}" >> $GITHUB_ENV
+        
+      - name: Configure Project
+        run: |
+          npx eas login --token $EXPO_TOKEN
+          npx eas build:configure --platform ios --profile preview
 
       - name: Build iOS Simulator
         run: |
