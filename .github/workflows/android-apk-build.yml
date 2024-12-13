@@ -1,11 +1,11 @@
 name: Build Android APK
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
-
+  release:
+    types:
+      - created
+  
 jobs:
   build-android-apk:
     name: Build Android APK
