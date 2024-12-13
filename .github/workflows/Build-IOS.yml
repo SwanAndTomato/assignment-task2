@@ -43,5 +43,6 @@ jobs:
           body: |
             Changes in this Release:
             - Added iOS Simulator Build
+            - build URL:[View on Expo] (https://expo.dev/accounts/swanandtomato/projects/devfinder/builds/b8d82392-0d30-4946-9a63-6ba7e3279035)
           draft: false
           prerelease: false
