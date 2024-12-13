@@ -23,14 +23,10 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install -g eas-cli --force
-    
-      - name: Set EXPO_TOKEN Environment Variable
-        run: |
-            echo "EXPO_TOKEN=${{ secrets.EXP0_TOKEN }}" >> $GITHUB_ENV
         
       - name: Configure Project
         run: |
-          EXPO_TOKEN=EXPO_TOKEN eas build:configure --platform ios --profile preview
+          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build:configure --platform ios --profile preview
 
       - name: Build iOS Simulator
         run: |
