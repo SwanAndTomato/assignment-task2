@@ -26,11 +26,11 @@ jobs:
         
       - name: Configure Project
         run: |
-          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build:configure --platform ios --profile preview
+          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build:configure
 
       - name: Build iOS Simulator
         run: |
-          EXPO_TOKEN=EXPO_TOKEN eas build --platform ios --profile preview --non-interactive
+          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview --non-interactive
 
       - name: Create Github Release
         id: create_release
