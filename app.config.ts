@@ -19,7 +19,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     assetBundlePatterns: ['**/*'],
     ios: {
         supportsTablet: true,
-    },
+        bundleIdentifier: "com.bvc-mobile-app-swanandtomato.devfinder",
+      },
+      android: {
+        package: "com.bvc-mobile-app-swanandtomato.devfinder",
+      },
     web: {
         favicon: './assets/favicon.png',
     },
