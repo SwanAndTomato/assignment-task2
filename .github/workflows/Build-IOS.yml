@@ -1,0 +1,44 @@
+name: Build iPhone Simulator
+
+on:
+    workflow_dispatch:
+    release:
+      types:
+        - created
+
+jobs:
+  build-ios:
+    name: Build iPhone Simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: |
+          npm install -g expo-cli
+          npm install
+
+      - name: Authenticate Expo
+        env:
+          EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
+        run: |
+          expo login --non-interactive --token "$EXPO_TOKEN"
+
+      - name: Build iOS Simulator
+        env:
+          EXPO_TOKEN: ${{ secrets.EXP0_TOKEN }}
+        run: |
+          expo build:ios --type simulator --non-interactive
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: iOS-Simulator-Build
+          path: dist/*.tar.gz
