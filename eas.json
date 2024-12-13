@@ -1,0 +1,16 @@
+{
+    "cli": {
+      "version": "13.3.0",
+      "appVersionSource": "remote"
+    },
+    "build": {
+      "preview": {
+        "distribution": "internal",
+        "ios": {
+          "buildConfiguration": "Release",
+          "credentialsSource": "remote",
+          "simulator": true
+        }
+      }
+    }
+  }
