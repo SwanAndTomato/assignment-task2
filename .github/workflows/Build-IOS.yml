@@ -23,7 +23,11 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install -g eas-cli --force
-        
+
+      - name: Install Expo Image Picker
+        run: |
+          npm install expo-image-picker
+          
       - name: Build iOS Simulator
         run: |
           EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview --non-interactive
