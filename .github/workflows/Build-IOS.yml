@@ -24,10 +24,6 @@ jobs:
         run: |
           npm install -g eas-cli --force
         
-      - name: Configure Project
-        run: |
-          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build:configure
-
       - name: Build iOS Simulator
         run: |
           EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview --non-interactive
@@ -40,5 +36,8 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release:
+            - Added iOS Simulator Build
           draft: false
           prerelease: false
