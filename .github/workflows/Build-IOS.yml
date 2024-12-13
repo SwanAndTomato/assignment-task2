@@ -26,8 +26,8 @@ jobs:
 
       - name: Install Expo Image Picker
         run: |
-          npm install expo-image-picker
-          
+          npm install expo-image-picker --force
+
       - name: Build iOS Simulator
         run: |
           EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview --non-interactive
