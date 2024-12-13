@@ -23,7 +23,6 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install -g expo-cli --force
-          npm install
 
       - name: Authenticate Expo
         env:
