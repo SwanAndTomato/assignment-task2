@@ -1,19 +1,10 @@
 name: Build and Upload Release Artifacts
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
-    inputs:
-      build_ios:
-        description: 'Build iOS binary'
-        required: false
-        default: 'true'
-      build_android:
-        description: 'Build Android binary'
-        required: false
-        default: 'true'
+  release:
+    types:
+      - created
 
 jobs:
     test:
