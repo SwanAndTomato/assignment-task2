@@ -30,7 +30,7 @@ jobs:
 
       - name: Build iOS Simulator
         run: |
-          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview --interactive
+          EXPO_TOKEN=${{ secrets.EXP0_TOKEN }} eas build --platform ios --profile preview
 
       - name: Create Github Release
         id: create_release
