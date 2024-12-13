@@ -2,8 +2,8 @@ import { ExpoConfig, ConfigContext } from 'expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
-    name: 'volunteam',
-    slug: 'volunteam',
+    name: 'devfinder',
+    slug: 'devfinder',
     owner: 'swanandtomato',
     version: '1.0.0',
     orientation: 'portrait',
@@ -34,7 +34,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     extra: {
         eas: {
-            projectId: '954f3b8e-1155-4f8f-8601-a2b3126da39e',
+            projectId: 'bfa61103-0c53-4ffa-999a-260d7c7a3c05',
         },
         IMGBB_API_KEY: process.env.IMGBB_API_KEY,
     },
