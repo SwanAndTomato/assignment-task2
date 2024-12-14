@@ -35,10 +35,6 @@ jobs:
               Commit: ${{ github.sha }}
               Branch: ${{ github.ref }}
               Release ID: ${{ github.run_id }}
-              Release URL: ${{ github.event.release.html_url }}
-              Release Created At: ${{ github.event.release.created_at }}
-              Release Published At: ${{ github.event.release.published_at }}
-              Release Author: ${{ github.event.release.author.login }}      
               Changes in this Release:
               - Added New Release
             draft: false
